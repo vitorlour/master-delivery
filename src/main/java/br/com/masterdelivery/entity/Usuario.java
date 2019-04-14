@@ -15,10 +15,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +36,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Usuario extends BaseObject implements Serializable{
 	
 	/**
@@ -47,12 +51,14 @@ public class Usuario extends BaseObject implements Serializable{
 	private Long id;
 	
     @Column(name = "email")
+    @Email(message = "E-mail precisa ser valido !")
 	private String email;
 	
     @Column(name = "senha")
+    @NotBlank(message = "Por favor preencher a senha !") 
     private String senha;
     
-    @Column(name = "nr_token_usuario")
+    @Column(name = "nr_token_access_usuario")
     private String tokenUsuario;
     
     @OneToMany(fetch = FetchType.EAGER)

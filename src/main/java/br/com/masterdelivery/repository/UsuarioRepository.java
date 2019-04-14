@@ -14,4 +14,10 @@ import br.com.masterdelivery.entity.Usuario;
 @Repository("usuarioRepository")
 public interface UsuarioRepository extends GenericRepository<Usuario, Long> {
 
+	Usuario findByEmail(String email);
+
+	long countByEmailAndSenha(String email, String senha);
+
+	long countByEmail(String email);
+
 }

@@ -20,7 +20,7 @@ public class CrudTest implements CommandLineRunner {
 
 	@Autowired
 	private UsuarioService service;
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(CrudTest.class, args);
 	}
@@ -38,11 +38,17 @@ public class CrudTest implements CommandLineRunner {
 	private void saveData() {
 		Usuario user1 = new Usuario();
 
-		user1.setEmail("vitorzzzz@hotmail.com");
+		user1.setEmail("vitorlour@hotmail.com");
 		user1.setSenha("123456");
 		user1.setTokenUsuario("8bca56e1-3f3b-4751-9093-5fca816ecbaa");
 
 		service.salvar(user1);
+		
+		service.alterarSenha(user1, "GG");
+		
+		//service.recuperarSenha("vitorlour@hotmail.com");
+		
+		//service.excluirCadastro(user1);
 	}
 
 }

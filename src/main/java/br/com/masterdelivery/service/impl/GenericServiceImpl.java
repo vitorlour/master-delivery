@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.masterdelivery.entity.BaseObject;
 import br.com.masterdelivery.repository.GenericRepository;
 import br.com.masterdelivery.service.GenericService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  * @author vitorlour
@@ -21,16 +23,12 @@ import br.com.masterdelivery.service.GenericService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class GenericServiceImpl<T extends BaseObject, ID extends Serializable> implements GenericService<T, ID>{
 	
 	@Autowired
 	private GenericRepository<T, ID> repository;
-	
-	public GenericServiceImpl(GenericRepository<T, ID> repository) {
-		this.repository = repository;
-	}
-	
-	public GenericServiceImpl() {}
 	
 	@Transactional
 	public void salvar(T entity) {
