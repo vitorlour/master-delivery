@@ -13,7 +13,7 @@ import br.com.masterdelivery.service.PlataformaTokenService;
  * @author vitorlour
  *
  */
-@Service
+@Service("plataformaTokenService")
 public class PlataformaTokenServiceImpl extends GenericServiceImpl<PlataformaToken, Long> implements PlataformaTokenService{
 	
 }

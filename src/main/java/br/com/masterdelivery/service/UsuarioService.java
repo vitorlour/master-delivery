@@ -3,7 +3,8 @@
  */
 package br.com.masterdelivery.service;
 
-import br.com.masterdelivery.dto.Resposta;
+import br.com.masterdelivery.dto.EmailDTO;
+import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.entity.Usuario;
 
 /**
@@ -12,12 +13,12 @@ import br.com.masterdelivery.entity.Usuario;
  */
 public interface UsuarioService extends GenericService<Usuario, Long> {
 	
-	Resposta realizarCadastro(Usuario usuario);
+	void realizarCadastro(UsuarioDTO usuario);
 	
-	Resposta alterarSenha(Usuario usuario, String novaSenha);
+	void alterarSenha(UsuarioDTO usuario, String novaSenha);
 	
-	Resposta recuperarSenha(String email);
+	void recuperarSenha(EmailDTO email);
 	
-	Resposta excluirCadastro(Usuario usuario);
+	void excluirCadastro(UsuarioDTO usuario);
 	
 }

@@ -15,6 +15,8 @@ import br.com.masterdelivery.entity.Usuario;
 public interface UsuarioRepository extends GenericRepository<Usuario, Long> {
 
 	Usuario findByEmail(String email);
+	
+	Usuario findByEmailAndSenha(String email, String senha);
 
 	long countByEmailAndSenha(String email, String senha);
 

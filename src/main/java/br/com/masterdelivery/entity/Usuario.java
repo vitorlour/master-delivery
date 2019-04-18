@@ -50,11 +50,11 @@ public class Usuario extends BaseObject implements Serializable{
 	@Column(name="id")  
 	private Long id;
 	
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     @Email(message = "E-mail precisa ser valido !")
 	private String email;
 	
-    @Column(name = "senha")
+    @Column(name = "senha", nullable = false)
     @NotBlank(message = "Por favor preencher a senha !") 
     private String senha;
     

@@ -5,28 +5,31 @@ package br.com.masterdelivery.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.com.masterdelivery.dto.Resposta;
+import br.com.masterdelivery.dto.EmailBuilder;
+import br.com.masterdelivery.dto.EmailDTO;
+import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.entity.Usuario;
+import br.com.masterdelivery.mapper.UsuarioMapper;
 import br.com.masterdelivery.repository.UsuarioRepository;
 import br.com.masterdelivery.service.UsuarioService;
+import br.com.masterdelivery.service.exception.ObjectFoundException;
+import br.com.masterdelivery.service.exception.ObjectNotFoundException;
 import br.com.masterdelivery.utils.Gerador;
 
 /**
  * @author vitorlour
  *
  */
-@Service
+@Service("usuarioService")
 public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implements UsuarioService {
 
-	private static final String SENHA_INVALIDA = "Senha invalida !";
-	private static final String E_MAIL_EM_BRANCO = "E-mail em branco";
-	private static final String AVISO_E_MAIL_INEXISTENTE = "E-mail inexistente";
+	private static final String E_MAIL_NÃO_ENCONTRADO = "E-mail não encontrado !";
 	private static final String TEXTO_RECUPERAR_SENHA = "Olá, sua nova senha é ";
 	private static final String DELIMITER = "";
 	private static final String NOVA_SENHA = "Sua nova senha do Master Delivery";
 	private static final String USUARIO_NÃO_ENCONTRADO = "Usuario não encontrado !";
-	private static final String OBJETO_NULLO = "Objeto nullo";
 	private static final String AVISO_EMAIL_EXISTENTE = "E-mail já cadastrado";
 
 	@Autowired
@@ -35,84 +38,72 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 	@Autowired
 	private EmailService emailService;
 
-	public Resposta realizarCadastro(Usuario usuario) {
-		Resposta resposta = null;
+	@Autowired
+	private UsuarioMapper mapper;
 
-		if (usuario != null) {
-			if (!existeEmailCadastrado(usuario.getEmail())) {
-				repository.saveAndFlush(usuario);
-			} else {
-				return new Resposta(AVISO_EMAIL_EXISTENTE, true);
-			}
+	public void realizarCadastro(UsuarioDTO dto) {
+		if (!existeEmailCadastrado(dto.getEmail())) {
+			salvar(mapper.map(dto, Usuario.class));
 		} else {
-			return new Resposta(OBJETO_NULLO, true);
+			throw new ObjectFoundException(AVISO_EMAIL_EXISTENTE);
 		}
-
-		return resposta;
 	}
 
-	public Resposta alterarSenha(Usuario usuario, String novaSenha) {
-		Resposta resposta = null;
-
-		if (usuario != null) {
-			if (!novaSenha.isBlank()) {
-				if (existeUsuarioCadastrado(usuario.getEmail(), usuario.getSenha())) {
-					usuario.setSenha(novaSenha);
-					repository.saveAndFlush(usuario);
-				} else {
-					return new Resposta(USUARIO_NÃO_ENCONTRADO, true);
-				}
-			} else {
-				return new Resposta(SENHA_INVALIDA, true);
-			}
-		} else {
-			return new Resposta(OBJETO_NULLO, true);
-		}
-		return resposta;
-	}
-
-	public Resposta recuperarSenha(String email) {
-		Resposta resposta = null;
+	public void alterarSenha(UsuarioDTO dto, String novaSenha) {
 		Usuario usuario = null;
 
-		if (!email.isBlank()) {
-			if (repository.countByEmail(email) == 1) {
-				usuario = repository.findByEmail(email);
-				usuario.setSenha(Gerador.geraSenhaAleatoria());
-
-				repository.saveAndFlush(usuario);
-
-				emailService.enviarEmail(email, NOVA_SENHA,
-						String.join(DELIMITER, TEXTO_RECUPERAR_SENHA, usuario.getSenha()));
-
-			} else {
-				return new Resposta(AVISO_E_MAIL_INEXISTENTE, true);
-			}
+		if (existeUsuarioCadastrado(dto.getEmail(), dto.getSenha())) {
+			usuario = buscarUsuarioPorEmailSenha(dto.getEmail(), dto.getSenha());
+			usuario.setSenha(novaSenha);
+			salvar(usuario);
 		} else {
-			return new Resposta(E_MAIL_EM_BRANCO, true);
+			throw new ObjectNotFoundException(USUARIO_NÃO_ENCONTRADO);
 		}
-
-		return resposta;
 	}
 
-	public Resposta excluirCadastro(Usuario usuario) {
-		Resposta resposta = null;
+	public void recuperarSenha(EmailDTO dto) {
+		Usuario usuario = null;
 
-		if (usuario != null) {
-			repository.delete(usuario);
+		if (existeEmailCadastrado(dto.getEmail())) {
+			usuario = repository.findByEmail(dto.getEmail());
+			usuario.setSenha(Gerador.geraSenhaAleatoria());
+			salvar(usuario);
+			emailService.enviarEmail(EmailBuilder
+					.builder()
+					.para(dto.getEmail())
+					.assunto(NOVA_SENHA)
+					.conteudo(String.join(DELIMITER, TEXTO_RECUPERAR_SENHA, usuario.getSenha()))
+					.build());
+
 		} else {
-			return new Resposta(OBJETO_NULLO, true);
+			throw new ObjectNotFoundException(E_MAIL_NÃO_ENCONTRADO);
 		}
-		return resposta;
+
 	}
 
-	public boolean existeEmailCadastrado(String email) {
+	public void excluirCadastro(UsuarioDTO dto) {
+		Usuario usuario = null;
+
+		if (existeUsuarioCadastrado(dto.getEmail(), dto.getSenha())) {
+			usuario = buscarUsuarioPorEmailSenha(dto.getEmail(), dto.getSenha());
+			excluir(usuario);
+		} else {
+			throw new ObjectNotFoundException(USUARIO_NÃO_ENCONTRADO);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	private boolean existeEmailCadastrado(String email) {
 		return repository.countByEmail(email) == 1;
 	}
 
-	// trocar senha por TOKEN futuramente.
-	public boolean existeUsuarioCadastrado(String email, String senha) {
+	@Transactional(readOnly = true)
+	private boolean existeUsuarioCadastrado(String email, String senha) {
 		return repository.countByEmailAndSenha(email, senha) == 1;
 	}
 
+	@Transactional
+	private Usuario buscarUsuarioPorEmailSenha(String email, String senha) {
+		return repository.findByEmailAndSenha(email, senha);
+	}
 }

@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -54,7 +53,7 @@ public class PlataformaToken extends BaseObject implements Serializable {
 	@Column(name = "ie_chamada_ativa")
 	private Boolean chamadaAtiva;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Plataforma plataforma;
 
 	@ManyToOne(fetch = FetchType.EAGER)

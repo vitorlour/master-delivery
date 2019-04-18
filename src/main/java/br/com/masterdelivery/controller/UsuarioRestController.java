@@ -4,17 +4,22 @@
 package br.com.masterdelivery.controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.masterdelivery.entity.Usuario;
+import br.com.masterdelivery.dto.EmailDTO;
+import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,80 +31,49 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 @Api(value = "Usuário")
-@ApiResponses(value = { @ApiResponse(code = 200, message = "Requisição foi bem sucedida"),
-						@ApiResponse(code = 401, message = "Você não está autorizado"),
-						@ApiResponse(code = 403, message = "Acesso está proibido"),
-						@ApiResponse(code = 404, message = "Não foi encontrado") })
+@ApiResponses(value = { @ApiResponse(code = 200, message = "Estas requisição foi bem sucedida."),
+		@ApiResponse(code = 201, message = "A requisição foi bem sucessida e um novo recurso foi criado como resultado."),
+		@ApiResponse(code = 202, message = "A requisição foi recebida mas nenhuma ação foi tomada sobre ela."),
+		@ApiResponse(code = 204, message = "Não há conteúdo para enviar para esta solicitação"),
+		@ApiResponse(code = 400, message = "Essa resposta significa que o servidor não entendeu a requisição pois está com uma sintaxe inválida."),
+		@ApiResponse(code = 401, message = "Você deve se autenticar para obter a resposta solicitada."),
+		@ApiResponse(code = 403, message = "Não tem direitos de acesso ao conteúdo"),
+		@ApiResponse(code = 404, message = "O servidor não pode encontrar o recurso solicitado.") })
 @RestController
 @RequestMapping(value = "/usuario/")
+@Validated
 public class UsuarioRestController {
 
 	@Autowired
 	private UsuarioService service;
 
-	@ApiOperation(value = "Realiza cadastro do usuário", response = ResponseEntity.class)
+	@ApiOperation(value = "Realiza o cadastro do usuário", response = ResponseEntity.class)
 	@PostMapping(value = "realizarcadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Object> realizarCadastro(@RequestBody @Valid Usuario usuario) {
-
-		try {
-			if (service.realizarCadastro(usuario) == null) {
-				return ResponseEntity.ok().body("OK");
-			} else {
-				return ResponseEntity.badRequest().body("ERRO");
-			}
-
-		} catch (Exception e) {
-		}
-
-		return ResponseEntity.badRequest().body("ERRO");
+	public ResponseEntity<?> realizarCadastro(@Valid @RequestBody UsuarioDTO usuario) {
+		service.realizarCadastro(usuario);
+		return ResponseEntity.ok().build();
 	}
 
 	@ApiOperation(value = "Altera a senha do usuário", response = ResponseEntity.class)
-	@PostMapping(value = "alterarsenha", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Object> alterarSenha(@RequestBody @Valid Usuario usuario, String novaSenha) {
-
-		try {
-			if (service.alterarSenha(usuario, novaSenha) == null) {
-				return ResponseEntity.ok().body("OK");
-			} else {
-				return ResponseEntity.badRequest().body("ERRO");
-			}
-
-		} catch (Exception e) {
-		}
-		return ResponseEntity.ok().body("ERRO");
+	@PutMapping(value = "alterarsenha/{novaSenha}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> alterarSenha(@Valid @RequestBody UsuarioDTO usuario,
+			@PathVariable("novaSenha") @NotBlank(message = "Por favor preencher a senha !") String novaSenha) {
+		service.alterarSenha(usuario, novaSenha);
+		return ResponseEntity.ok().build();
 	}
 
 	@ApiOperation(value = "Recupera senha do usuário", response = ResponseEntity.class)
 	@PostMapping(value = "recuperarsenha", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Object> recuperarSenha(@RequestBody String email) {
-
-		try {
-			if (service.recuperarSenha(email) == null) {
-				return ResponseEntity.ok().body("OK");
-			} else {
-				return ResponseEntity.badRequest().body("ERRO");
-			}
-
-		} catch (Exception e) {
-		}
-		return ResponseEntity.ok().body("ERRO");
+	public ResponseEntity<?> recuperarSenha(@Valid @RequestBody EmailDTO email) {
+		service.recuperarSenha(email);
+		return ResponseEntity.ok().build();
 	}
-	
+
 	@ApiOperation(value = "Exclui o cadastro do usuario", response = ResponseEntity.class)
 	@DeleteMapping(value = "excluircadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Object> excluirCadastro(@RequestBody Usuario usuario) {
-
-		try {
-			if (service.excluirCadastro(usuario) == null) {
-				return ResponseEntity.ok().body("OK");
-			} else {
-				return ResponseEntity.badRequest().body("ERRO");
-			}
-
-		} catch (Exception e) {
-		}
-		return ResponseEntity.ok().body("ERRO");
+	public ResponseEntity<?> excluirCadastro(@Valid @RequestBody UsuarioDTO usuario) {
+		service.excluirCadastro(usuario);
+		return ResponseEntity.ok().build();
 	}
 
 }

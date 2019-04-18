@@ -13,5 +13,5 @@ import br.com.masterdelivery.service.PlataformaService;
  * @author vitorlour
  *
  */
-@Service
+@Service("plataformaService")
 public class PlataformaServiceImpl extends GenericServiceImpl<Plataforma, Long> implements PlataformaService{}

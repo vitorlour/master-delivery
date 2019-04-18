@@ -13,7 +13,7 @@ import br.com.masterdelivery.service.EntregaService;
  * @author vitorlour
  *
  */
-@Service
+@Service("entregaService")
 public class EntregaServiceImpl extends GenericServiceImpl<Entrega, Long> implements EntregaService {
 	
 }

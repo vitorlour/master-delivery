@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,7 +64,7 @@ public class Entrega extends BaseObject implements Serializable{
     @Column(name = "dt_entrega")
 	private Date dataEntrega;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Plataforma plataforma;
     
     @ManyToOne(fetch = FetchType.EAGER)

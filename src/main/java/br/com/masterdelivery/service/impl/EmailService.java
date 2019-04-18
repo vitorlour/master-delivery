@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import br.com.masterdelivery.dto.EmailBuilder;
+
 /**
  * @author vitorlour
  *
@@ -26,16 +28,16 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	public void enviarEmail(String email, String assunto, String texto) {
+	public void enviarEmail(EmailBuilder email) {
 
 		try {
 			MimeMessage mail = mailSender.createMimeMessage();
 
 			MimeMessageHelper helper = new MimeMessageHelper(mail);
 
-			helper.setTo(email);
-			helper.setSubject(assunto);
-			helper.setText(String.join(DELIMITER, ABRE_PARAGRAFO, texto, FECHA_PARAGRAFO), true);
+			helper.setTo(email.getPara());
+			helper.setSubject(email.getAssunto());
+			helper.setText(String.join(DELIMITER, ABRE_PARAGRAFO, email.getConteudo(), FECHA_PARAGRAFO), true);
 
 			mailSender.send(mail);
 		} catch (Exception e) {

@@ -5,7 +5,6 @@ package br.com.masterdelivery.service;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 import br.com.masterdelivery.entity.BaseObject;
 
@@ -21,7 +20,7 @@ public interface GenericService<T extends BaseObject, ID extends Serializable> {
 
 	void excluirPorId(ID id);
 
-	Optional<Optional<T>> pesquisarPorId(ID id);
+	Object pesquisarPorId(ID id);
 
 	List<T> pesquisarTodos();
 
