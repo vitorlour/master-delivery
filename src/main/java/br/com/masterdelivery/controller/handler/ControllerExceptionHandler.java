@@ -1,4 +1,4 @@
-package br.com.masterdelivery.controller.exception;
+package br.com.masterdelivery.controller.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.masterdelivery.controller.exception.StandardError;
+import br.com.masterdelivery.controller.exception.ValidationError;
+import br.com.masterdelivery.service.exception.AuthorizationException;
 import br.com.masterdelivery.service.exception.DataIntegrityException;
 import br.com.masterdelivery.service.exception.ObjectFoundException;
 import br.com.masterdelivery.service.exception.ObjectNotFoundException;
@@ -46,5 +49,12 @@ public class ControllerExceptionHandler {
 		
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Objeto duplicado", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+		
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Acesso negado", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
 	}
 }

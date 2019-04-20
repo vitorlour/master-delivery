@@ -42,7 +42,7 @@ public class CrudTest implements CommandLineRunner {
 
 		user1.setEmail("vitorlour@hotmail.com");
 		user1.setSenha("123456");
-		user1.setTokenUsuario("8bca56e1-3f3b-4751-9093-5fca816ecbaa");
+		//user1.setTokenUsuario("8bca56e1-3f3b-4751-9093-5fca816ecbaa");
 		
 		//service.salvar(user1);
 		
@@ -61,10 +61,6 @@ public class CrudTest implements CommandLineRunner {
 		dto.setSenha("123456");
 		
 		service.realizarCadastro(dto);
-		
-		service.alterarSenha(dto, "Test");
-		
-		//service.recuperarSenha("vitorlour@hotmail.com");
 	}
 
 }

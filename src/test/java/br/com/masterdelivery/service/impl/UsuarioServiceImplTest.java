@@ -40,7 +40,7 @@ public class UsuarioServiceImplTest {
 
 		usuario.setEmail("vitorlour@hotmail.com");
 		usuario.setSenha("123456");
-		usuario.setTokenUsuario("8bca56e1-3f3b-4751-9093-5fca816ecbaa");
+		//usuario.setTokenUsuario("8bca56e1-3f3b-4751-9093-5fca816ecbaa");
 	}
 
 	/**

@@ -77,7 +77,10 @@ public abstract class GenericServiceImpl<T extends BaseObject, ID extends Serial
 
 	@Transactional(readOnly = true)
 	public Object pesquisarPorId(ID id) {
-		Optional<T> obj = repository.findById(id);
+		Optional<T> obj = null;
+		if (id != null) {
+			obj = repository.findById(id);
+		}
 		return obj.orElseThrow(() -> new ObjectNotFoundException(NÃO_FOI_ENCONTRADO_ID + id));
 	}
 

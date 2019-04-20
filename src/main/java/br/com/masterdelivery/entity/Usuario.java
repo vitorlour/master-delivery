@@ -20,6 +20,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,10 +58,8 @@ public class Usuario extends BaseObject implements Serializable{
 	
     @Column(name = "senha", nullable = false)
     @NotBlank(message = "Por favor preencher a senha !") 
+    @JsonIgnore
     private String senha;
-    
-    @Column(name = "nr_token_access_usuario")
-    private String tokenUsuario;
     
     @OneToMany(fetch = FetchType.EAGER)
 	private Set<PlataformaToken> token;

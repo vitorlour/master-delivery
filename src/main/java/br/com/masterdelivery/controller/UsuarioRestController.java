@@ -4,14 +4,11 @@
 package br.com.masterdelivery.controller;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.masterdelivery.dto.EmailDTO;
+import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.service.UsuarioService;
 import io.swagger.annotations.Api;
@@ -55,10 +53,9 @@ public class UsuarioRestController {
 	}
 
 	@ApiOperation(value = "Altera a senha do usuário", response = ResponseEntity.class)
-	@PutMapping(value = "alterarsenha/{novaSenha}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> alterarSenha(@Valid @RequestBody UsuarioDTO usuario,
-			@PathVariable("novaSenha") @NotBlank(message = "Por favor preencher a senha !") String novaSenha) {
-		service.alterarSenha(usuario, novaSenha);
+	@PutMapping(value = "alterarsenha", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> alterarSenha(@Valid @RequestBody SenhaDTO novaSenha) {
+		service.alterarSenha(novaSenha);
 		return ResponseEntity.ok().build();
 	}
 
@@ -69,11 +66,14 @@ public class UsuarioRestController {
 		return ResponseEntity.ok().build();
 	}
 
-	@ApiOperation(value = "Exclui o cadastro do usuario", response = ResponseEntity.class)
-	@DeleteMapping(value = "excluircadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> excluirCadastro(@Valid @RequestBody UsuarioDTO usuario) {
-		service.excluirCadastro(usuario);
-		return ResponseEntity.ok().build();
-	}
+	/*
+	 * @ApiOperation(value = "Exclui o cadastro do usuario", response =
+	 * ResponseEntity.class)
+	 * 
+	 * @DeleteMapping(value = "excluircadastro", consumes =
+	 * MediaType.APPLICATION_JSON_UTF8_VALUE) public ResponseEntity<?>
+	 * excluirCadastro(@Valid @RequestBody UsuarioDTO usuario) {
+	 * service.excluirCadastro(usuario); return ResponseEntity.ok().build(); }
+	 */
 
 }
