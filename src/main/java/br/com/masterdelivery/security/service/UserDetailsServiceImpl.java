@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.masterdelivery.entity.Usuario;
-import br.com.masterdelivery.security.UserSS;
+import br.com.masterdelivery.security.User;
 import br.com.masterdelivery.service.UsuarioService;
 
 
@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException(email);
 		}
 		
-		return UserSS.builder()
+		return User.builder()
 				.id(usuario.getId())
 				.email(usuario.getEmail())
 				.senha(usuario.getSenha())

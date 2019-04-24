@@ -18,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmailBuilder {
+public class EmailBuilderDTO {
 	
     private String para;
     private String assunto;

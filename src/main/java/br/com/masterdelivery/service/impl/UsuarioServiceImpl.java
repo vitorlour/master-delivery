@@ -8,14 +8,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.masterdelivery.dto.EmailBuilder;
+import br.com.masterdelivery.dto.EmailBuilderDTO;
 import br.com.masterdelivery.dto.EmailDTO;
 import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.mapper.UsuarioMapper;
 import br.com.masterdelivery.repository.UsuarioRepository;
-import br.com.masterdelivery.security.UserSS;
+import br.com.masterdelivery.security.User;
 import br.com.masterdelivery.security.service.UserService;
 import br.com.masterdelivery.service.UsuarioService;
 import br.com.masterdelivery.service.exception.AuthorizationException;
@@ -67,7 +67,7 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 	
 	@Transactional
 	public void alterarSenha(SenhaDTO novaSenha) {
-		UserSS user = UserService.authenticated();
+		User user = UserService.authenticated();
 
 		Usuario usuario = (Usuario) pesquisarPorId(user.getId());
 		
@@ -92,7 +92,7 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 		passwordEncoder(usuario);
 		
 		salvar(usuario);
-		emailService.enviarEmail(EmailBuilder
+		emailService.enviarEmail(EmailBuilderDTO
 					.builder()
 					.para(dto.getEmail())
 					.assunto(NOVA_SENHA)

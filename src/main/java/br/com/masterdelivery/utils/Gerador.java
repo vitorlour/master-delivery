@@ -19,9 +19,9 @@ public class Gerador {
 
 	private static final Random RANDOM = new SecureRandom();
 
-	public static final int TAMANHO_DA_SENHA = 8;
+	private static final int TAMANHO_DA_SENHA = 8;
 
-	public static final String LETRAS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789+@";
+	private static final String LETRAS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789+@";
 
 	public String senhaAleatoria() {
 

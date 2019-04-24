@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.mapper.UsuarioMapper;
 import br.com.masterdelivery.repository.UsuarioRepository;
-import br.com.masterdelivery.security.UserSS;
+import br.com.masterdelivery.security.User;
 
 /**
  * @author vitorlour
@@ -39,7 +39,7 @@ public class UsuarioServiceImplTest {
 	
 	private static Usuario usuario;
 	
-	private static UserSS user;
+	private static User user;
 
 	/**
 	 */
@@ -55,7 +55,7 @@ public class UsuarioServiceImplTest {
 						 .senha("123456")
 						 .build();
 		
-		user = UserSS.builder()
+		user = User.builder()
 					 .id(1L)
 					 .email("vitorlour@hotmail.com")
 					 .senha("123456")

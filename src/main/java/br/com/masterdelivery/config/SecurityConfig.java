@@ -18,23 +18,20 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 import br.com.masterdelivery.security.JWTAuthenticationFilter;
 import br.com.masterdelivery.security.JWTAuthorizationFilter;
 import br.com.masterdelivery.security.JWTUtil;
 
-
-
+/**
+ * @author vitorlour
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	@Autowired
-	private JWTUtil jwtUtil;
+	private static final String PATH_CORS = "/**";
 	
 	private static final String[] PUBLIC_MATCHERS = {
 			"/swagger-ui.html/**", 
@@ -52,6 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/usuario/realizarcadastro/**",
 			"/usuario/recuperarsenha/**"
 	};
+	
+	private static final String[] ALLOWED_METHODS = {
+			"POST", "GET", "PUT", "DELETE", "OPTIONS"
+	};
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JWTUtil jwtUtil;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -89,9 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
-		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList(ALLOWED_METHODS));
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
+		source.registerCorsConfiguration(PATH_CORS, configuration);
 		return source;
 	}
 	

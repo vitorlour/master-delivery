@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.masterdelivery.security.JWTUtil;
-import br.com.masterdelivery.security.UserSS;
+import br.com.masterdelivery.security.User;
 import br.com.masterdelivery.security.service.UserService;
+import br.com.masterdelivery.utils.Constantes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,13 +43,13 @@ public class AuthRestController {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
-	@ApiOperation(value = "Faz o refresh do token quando o mesmo ainda está válido", response = ResponseEntity.class)
+	@ApiOperation(value = "Faz o refresh do token de autenticação quando o mesmo ainda está válido", response = ResponseEntity.class)
 	@PostMapping(value = "refresh_token")
 	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
-		UserSS user = UserService.authenticated();
+		User user = UserService.authenticated();
 		String token = jwtUtil.generateToken(user.getUsername());
-		response.addHeader("Authorization", "Bearer " + token);
-		response.addHeader("access-control-expose-headers", "Authorization");
+		response.addHeader(Constantes.AUTHORIZATION, Constantes.BEARER + token);
+		response.addHeader(Constantes.ACCESS_CONTROL_EXPOSE_HEADERS, Constantes.AUTHORIZATION);
 		return ResponseEntity.noContent().build();
 	}
 

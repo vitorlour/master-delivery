@@ -15,9 +15,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class EmailDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3611113546452068808L;
+	
+	
 	@NotBlank(message = "Por favor preencher o E-mail !")
 	@Email(message = "E-mail precisa ser valido !")
 	private String email;

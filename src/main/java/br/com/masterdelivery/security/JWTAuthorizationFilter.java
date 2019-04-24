@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import br.com.masterdelivery.utils.Constantes;
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private JWTUtil jwtUtil;
@@ -31,8 +33,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
 		
-		String header = request.getHeader("Authorization");
-		if (header != null && header.startsWith("Bearer ")) {
+		String header = request.getHeader(Constantes.AUTHORIZATION);
+		if (header != null && header.startsWith(Constantes.BEARER)) {
 			UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));
 			if (auth != null) {
 				SecurityContextHolder.getContext().setAuthentication(auth);

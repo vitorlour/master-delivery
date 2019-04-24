@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import br.com.masterdelivery.dto.EmailBuilder;
+import br.com.masterdelivery.dto.EmailBuilderDTO;
 
 /**
  * @author vitorlour
@@ -28,7 +28,7 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	public void enviarEmail(EmailBuilder email) {
+	public void enviarEmail(EmailBuilderDTO email) {
 
 		try {
 			MimeMessage mail = mailSender.createMimeMessage();

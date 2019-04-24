@@ -17,10 +17,14 @@ import ma.glasnost.orika.impl.ConfigurableMapper;
 @Component
 public class UsuarioMapper extends ConfigurableMapper {
 	
+	private static final String SENHA = "senha";
+	
+	private static final String EMAIL = "email";
+
 	protected void configure(MapperFactory factory) {
 		factory.classMap(Usuario.class, UsuarioDTO.class)
-			.field("email", "email")
-			.field("senha", "senha")
+			.field(EMAIL, EMAIL)
+			.field(SENHA, SENHA)
 			.byDefault()
 			.register();
 	}

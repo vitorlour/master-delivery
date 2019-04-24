@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserSS implements UserDetails {
+public class User implements UserDetails {
 	
 	private static final String ROLE_USER = "ROLE_USER";
 

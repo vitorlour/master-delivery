@@ -65,15 +65,4 @@ public class UsuarioRestController {
 		service.recuperarSenha(email);
 		return ResponseEntity.ok().build();
 	}
-
-	/*
-	 * @ApiOperation(value = "Exclui o cadastro do usuario", response =
-	 * ResponseEntity.class)
-	 * 
-	 * @DeleteMapping(value = "excluircadastro", consumes =
-	 * MediaType.APPLICATION_JSON_UTF8_VALUE) public ResponseEntity<?>
-	 * excluirCadastro(@Valid @RequestBody UsuarioDTO usuario) {
-	 * service.excluirCadastro(usuario); return ResponseEntity.ok().build(); }
-	 */
-
 }

@@ -19,9 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.masterdelivery.dto.UsuarioDTO;
+import br.com.masterdelivery.utils.Constantes;
 
 
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
 	private AuthenticationManager authenticationManager;
     
@@ -57,19 +58,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 	
-		String username = ((UserSS) auth.getPrincipal()).getUsername();
+		String username = ((User) auth.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
-        res.addHeader("Authorization", "Bearer " + token);
-        res.addHeader("access-control-expose-headers", "Authorization");
+        res.addHeader(Constantes.AUTHORIZATION, Constantes.BEARER + token);
+        res.addHeader(Constantes.ACCESS_CONTROL_EXPOSE_HEADERS, Constantes.AUTHORIZATION);
 	}
 	
 	private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 		 
-        @Override
+
+		@Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
                 throws IOException, ServletException {
             response.setStatus(401);
-            response.setContentType("application/json"); 
+            response.setContentType(Constantes.APPLICATION_JSON); 
             response.getWriter().append(json());
         }
         
@@ -82,4 +84,5 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 + "\"path\": \"/login\"}";
         }
     }
+
 }
