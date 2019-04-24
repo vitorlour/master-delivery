@@ -103,7 +103,7 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 	public void excluirCadastro(UsuarioDTO dto) {}
 
 	@Transactional(readOnly = true)
-	private boolean existeEmailCadastrado(String email) {
+	public boolean existeEmailCadastrado(String email) {
 		return repository.countByEmail(email) == 1;
 	}
 

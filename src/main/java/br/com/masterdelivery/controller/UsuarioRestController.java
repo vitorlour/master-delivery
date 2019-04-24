@@ -35,7 +35,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 204, message = "Não há conteúdo para enviar para esta solicitação"),
 		@ApiResponse(code = 400, message = "Essa resposta significa que o servidor não entendeu a requisição pois está com uma sintaxe inválida."),
 		@ApiResponse(code = 401, message = "Você deve se autenticar para obter a resposta solicitada."),
-		@ApiResponse(code = 403, message = "Não tem direitos de acesso ao conteúdo"),
+		@ApiResponse(code = 403, message = "Não tem direito de acesso ao conteúdo"),
 		@ApiResponse(code = 404, message = "O servidor não pode encontrar o recurso solicitado.") })
 @RestController
 @RequestMapping(value = "/usuario/")

@@ -26,11 +26,11 @@ public class Gerador {
 	public String senhaAleatoria() {
 
 		String senha = VAZIO;
+		
 		for (int i = 0; i < TAMANHO_DA_SENHA; i++) {
 			int index = (int) (RANDOM.nextDouble() * LETRAS.length());
 			senha += LETRAS.substring(index, index + 1);
 		}
 		return senha;
 	}
-
 }

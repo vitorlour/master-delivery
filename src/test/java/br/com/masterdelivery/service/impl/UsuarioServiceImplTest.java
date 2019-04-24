@@ -3,16 +3,18 @@
  */
 package br.com.masterdelivery.service.impl;
 
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.masterdelivery.entity.Usuario;
+import br.com.masterdelivery.mapper.UsuarioMapper;
+import br.com.masterdelivery.repository.UsuarioRepository;
+import br.com.masterdelivery.security.UserSS;
 
 /**
  * @author vitorlour
@@ -25,8 +27,19 @@ public class UsuarioServiceImplTest {
 
 	@Spy
 	private EmailService mailService;
-
+	
+	@Spy
+	private BCryptPasswordEncoder pswEncoder;
+	
+	@Spy
+	private UsuarioMapper mapper;
+	
+	@Mock
+	private UsuarioRepository repository;
+	
 	private static Usuario usuario;
+	
+	private static UserSS user;
 
 	/**
 	 */
@@ -36,39 +49,45 @@ public class UsuarioServiceImplTest {
 	}
 
 	static {
-		usuario = new Usuario();
-
-		usuario.setEmail("vitorlour@hotmail.com");
-		usuario.setSenha("123456");
-		//usuario.setTokenUsuario("8bca56e1-3f3b-4751-9093-5fca816ecbaa");
+		usuario = Usuario.builder()
+						 .id(1L)
+						 .email("vitorlour@hotmail.com")
+						 .senha("123456")
+						 .build();
+		
+		user = UserSS.builder()
+					 .id(1L)
+					 .email("vitorlour@hotmail.com")
+					 .senha("123456")
+					 .build();
 	}
 
 	/**
 	 */
 	@Test
 	public void testRealizarCadastro() {
-		//when(usuarioService.existeEmailCadastrado(usuario.getEmail())).thenReturn(false);
-		/* assertNull("", usuarioService.realizarCadastro(usuario)); */
+		/*
+		 * when(repository.countByEmail(usuario.getEmail())).thenReturn(0L);
+		 * when(usuarioService.existeEmailCadastrado(usuario.getEmail())).thenReturn(
+		 * false); doNothing().when(usuarioService).salvar(usuario);
+		 */
 	}
 
 	/**
 	 */
 	@Test
 	public void testAlterarSenha() {
-
+		/*
+		 * when(UserService.authenticated()).thenReturn(user);
+		 * when(usuarioService.pesquisarPorId(user.getId())).thenReturn(usuario);
+		 * doNothing().when(usuarioService).salvar(usuario);
+		 */
 	}
 
 	/**
 	 */
 	@Test
 	public void testRecuperarSenha() {
-
-	}
-
-	/**
-	 */
-	@Test
-	public void testExcluirCadastro() {
 
 	}
 

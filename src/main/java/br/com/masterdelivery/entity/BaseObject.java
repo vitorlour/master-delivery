@@ -13,7 +13,7 @@ import lombok.Setter;
 
 /**
  * @author vitorlour
- * @Class que vai ter o que é comum entre as demais.
+ * @Class 
  */
 @Getter
 @Setter
