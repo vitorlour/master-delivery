@@ -47,21 +47,21 @@ public class UsuarioRestController {
 
 	@ApiOperation(value = "Realiza o cadastro do usuário", response = ResponseEntity.class)
 	@PostMapping(value = "realizarcadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> realizarCadastro(@Valid @RequestBody UsuarioDTO usuario) {
+	public ResponseEntity<Void> realizarCadastro(@Valid @RequestBody UsuarioDTO usuario) {
 		service.realizarCadastro(usuario);
 		return ResponseEntity.ok().build();
 	}
 
 	@ApiOperation(value = "Altera a senha do usuário", response = ResponseEntity.class)
 	@PutMapping(value = "alterarsenha", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> alterarSenha(@Valid @RequestBody SenhaDTO novaSenha) {
+	public ResponseEntity<Void> alterarSenha(@Valid @RequestBody SenhaDTO novaSenha) {
 		service.alterarSenha(novaSenha);
 		return ResponseEntity.ok().build();
 	}
 
 	@ApiOperation(value = "Recupera senha do usuário", response = ResponseEntity.class)
 	@PostMapping(value = "recuperarsenha", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> recuperarSenha(@Valid @RequestBody EmailDTO email) {
+	public ResponseEntity<Void> recuperarSenha(@Valid @RequestBody EmailDTO email) {
 		service.recuperarSenha(email);
 		return ResponseEntity.ok().build();
 	}

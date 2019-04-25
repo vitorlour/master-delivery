@@ -20,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,6 +62,7 @@ public class Entrega extends BaseObject implements Serializable{
 	private Date duracaoCorrida;
 	
     @Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "dt_entrega")
 	private Date dataEntrega;
     

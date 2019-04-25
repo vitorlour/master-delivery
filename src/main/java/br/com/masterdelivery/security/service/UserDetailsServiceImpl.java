@@ -10,7 +10,6 @@ import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.security.User;
 import br.com.masterdelivery.service.UsuarioService;
 
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -18,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UsuarioService service;
 	
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email){
 		Usuario usuario = service.encontrarPorEmail(email);
 		
 		if (usuario == null) {
@@ -26,9 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		
 		return User.builder()
-				.id(usuario.getId())
-				.email(usuario.getEmail())
-				.senha(usuario.getSenha())
-				.build();
+				   .id(usuario.getId())
+				   .email(usuario.getEmail())
+				   .senha(usuario.getSenha())
+				   .build();
 	}
 }

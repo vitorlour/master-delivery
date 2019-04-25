@@ -36,7 +36,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	
 	@Override
     public Authentication attemptAuthentication(HttpServletRequest req,
-                                                HttpServletResponse res) throws AuthenticationException {
+                                                HttpServletResponse res) {
 
 		try {
 			UsuarioDTO dto = new ObjectMapper()
@@ -44,8 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	
 	        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha(), new ArrayList<>());
 	        
-	        Authentication auth = authenticationManager.authenticate(authToken);
-	        return auth;
+	        return authenticationManager.authenticate(authToken);
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);

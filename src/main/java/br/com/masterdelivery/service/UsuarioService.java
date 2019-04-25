@@ -20,8 +20,6 @@ public interface UsuarioService extends GenericService<Usuario, Long> {
 	
 	void recuperarSenha(EmailDTO email);
 	
-	void excluirCadastro(UsuarioDTO usuario);
-	
 	Usuario encontrarPorEmail(String email);
 	
 }

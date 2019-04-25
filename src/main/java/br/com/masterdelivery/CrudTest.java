@@ -3,16 +3,13 @@ package br.com.masterdelivery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.service.UsuarioService;
 
-@SpringBootApplication
 @EntityScan(basePackages = { "br.com.masterdelivery.entity" })
 @EnableJpaRepositories(basePackages = { "br.com.masterdelivery.repository" })
 @ComponentScan(basePackages = { "br.com.masterdelivery" })
@@ -30,11 +27,10 @@ public class CrudTest implements CommandLineRunner {
 		try {
 			saveDataDTO();
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			e.getMessage();
 		}
 	}
 
-	@Transactional
 	private void saveDataDTO() {
 		UsuarioDTO dto = new UsuarioDTO();
 

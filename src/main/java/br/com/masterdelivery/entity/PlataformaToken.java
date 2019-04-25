@@ -48,7 +48,7 @@ public class PlataformaToken extends BaseObject implements Serializable {
 	private Long id;
 
 	@Column(name = "nr_token_access_plataforma")
-	private String plataformaToken;
+	private String numeroPlataformaToken;
 
 	@Column(name = "ie_chamada_ativa")
 	private Boolean chamadaAtiva;

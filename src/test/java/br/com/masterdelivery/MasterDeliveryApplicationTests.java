@@ -1,11 +1,7 @@
 package br.com.masterdelivery;
 
-import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class MasterDeliveryApplicationTests {
-
-	@Test
-	public void contextLoads() {
-	}
-
 }

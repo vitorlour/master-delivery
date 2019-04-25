@@ -24,16 +24,16 @@ public class ControllerExceptionHandler {
 
 	private static final String OBJETO_DUPLICADO = "Objeto duplicado";
 
-	private static final String ERRO_DE_VALIDAÇÃO = "Erro de validação";
+	private static final String ERRO_DE_VALIDACAO = "Erro de validação";
 
 	private static final String INTEGRIDADE_DE_DADOS = "Integridade de dados";
 	
-	private static final String NÃO_ENCONTRADO = "Não encontrado";
+	private static final String NAO_ENCONTRADO = "Não encontrado";
 
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
 		
-		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), NÃO_ENCONTRADO, e.getMessage(), request.getRequestURI());
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), NAO_ENCONTRADO, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 
@@ -47,7 +47,7 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
 		
-		ValidationError err = new ValidationError(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), ERRO_DE_VALIDAÇÃO, e.getMessage(), request.getRequestURI());
+		ValidationError err = new ValidationError(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), ERRO_DE_VALIDACAO, e.getMessage(), request.getRequestURI());
 		for (FieldError x : e.getBindingResult().getFieldErrors()) {
 			err.addError(x.getField(), x.getDefaultMessage());
 		}		

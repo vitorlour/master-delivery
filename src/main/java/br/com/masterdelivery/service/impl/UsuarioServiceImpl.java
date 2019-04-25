@@ -31,7 +31,7 @@ import br.com.masterdelivery.utils.Gerador;
 public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implements UsuarioService {
 
 	private static final String ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO = "Acesso negado, precisa se logar primeiro !";
-	private static final String E_MAIL_NÃO_ENCONTRADO = "E-mail não encontrado !";
+	private static final String E_MAIL_NAO_ENCONTRADO = "E-mail não encontrado !";
 	private static final String TEXTO_RECUPERAR_SENHA = "Olá, sua nova senha é ";
 	private static final String DELIMITER = "";
 	private static final String NOVA_SENHA = "Sua nova senha do Master Delivery";
@@ -84,7 +84,7 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 		Usuario usuario = encontrarPorEmail(dto.getEmail());
 			
 		if(usuario == null) {
-			throw new ObjectNotFoundException(E_MAIL_NÃO_ENCONTRADO);
+			throw new ObjectNotFoundException(E_MAIL_NAO_ENCONTRADO);
 		}
 		
 		String senha = gerador.senhaAleatoria();
@@ -100,23 +100,11 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 					.build());
 	}
 
-	public void excluirCadastro(UsuarioDTO dto) {}
-
 	@Transactional(readOnly = true)
 	public boolean existeEmailCadastrado(String email) {
 		return repository.countByEmail(email) == 1;
 	}
 
-	@Transactional(readOnly = true)
-	private boolean existeUsuarioCadastrado(String email, String senha) {
-		return repository.countByEmailAndSenha(email, senha) == 1;
-	}
-
-	@Transactional(readOnly = true)
-	public Usuario buscarUsuarioPorEmailSenha(String email, String senha) {
-		return repository.findByEmailAndSenha(email, senha);
-	}
-	
 	@Transactional(readOnly = true)
 	public Usuario encontrarPorEmail(String email) {
 		return repository.findByEmail(email);

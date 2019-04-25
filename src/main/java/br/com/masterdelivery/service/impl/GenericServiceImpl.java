@@ -31,13 +31,13 @@ import lombok.NoArgsConstructor;
 public abstract class GenericServiceImpl<T extends BaseObject, ID extends Serializable>
 		implements GenericService<T, ID> {
 
-	private static final String ERRO_NÃO_FOI_POSSÍVEL_EXCLUIR_POR_ID = "ERRO ! Não foi possível excluir por ID :";
+	private static final String ERRO_NAO_FOI_POSSIVEL_EXCLUIR_POR_ID = "ERRO ! Não foi possível excluir por ID :";
 
-	private static final String ERRO_NÃO_FOI_POSSÍVEL_EXCLUIR = "ERRO ! Não foi possível excluir";
+	private static final String ERRO_NAO_FOI_POSSIVEL_EXCLUIR = "ERRO ! Não foi possível excluir";
 
-	private static final String ERRO_NÃO_FOI_POSSIVEL_SALVAR = "ERRO ! Não foi possível salvar";
+	private static final String ERRO_NAO_FOI_POSSIVEL_SALVAR = "ERRO ! Não foi possível salvar";
 
-	private static final String NÃO_FOI_ENCONTRADO_ID = "Não foi encontrado ! ID: ";
+	private static final String NAO_FOI_ENCONTRADO_ID = "Não foi encontrado ! ID: ";
 
 	@Autowired
 	private GenericRepository<T, ID> repository;
@@ -49,7 +49,7 @@ public abstract class GenericServiceImpl<T extends BaseObject, ID extends Serial
 				repository.saveAndFlush(entity);
 			}
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException(ERRO_NÃO_FOI_POSSIVEL_SALVAR);
+			throw new DataIntegrityException(ERRO_NAO_FOI_POSSIVEL_SALVAR);
 		}
 	}
 
@@ -60,7 +60,7 @@ public abstract class GenericServiceImpl<T extends BaseObject, ID extends Serial
 				repository.delete(entity);
 			}
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException(ERRO_NÃO_FOI_POSSÍVEL_EXCLUIR);
+			throw new DataIntegrityException(ERRO_NAO_FOI_POSSIVEL_EXCLUIR);
 		}
 	}
 
@@ -71,22 +71,20 @@ public abstract class GenericServiceImpl<T extends BaseObject, ID extends Serial
 				repository.deleteById(id);
 			}
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException(ERRO_NÃO_FOI_POSSÍVEL_EXCLUIR_POR_ID + id);
+			throw new DataIntegrityException(ERRO_NAO_FOI_POSSIVEL_EXCLUIR_POR_ID + id);
 		}
 	}
 
 	@Transactional(readOnly = true)
 	public Object pesquisarPorId(ID id) {
-		Optional<T> obj = null;
-		if (id != null) {
-			obj = repository.findById(id);
-		}
-		return obj.orElseThrow(() -> new ObjectNotFoundException(NÃO_FOI_ENCONTRADO_ID + id));
+		Optional<T> obj = repository.findById(id);
+		
+		return obj.orElseThrow(() -> new ObjectNotFoundException(NAO_FOI_ENCONTRADO_ID + id));
 	}
 
 	@Transactional(readOnly = true)
 	public List<T> pesquisarTodos() {
-		return (List<T>) repository.findAll();
+		return repository.findAll();
 	}
 
 	@Transactional(readOnly = true)

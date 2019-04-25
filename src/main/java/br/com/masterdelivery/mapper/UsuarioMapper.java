@@ -20,7 +20,8 @@ public class UsuarioMapper extends ConfigurableMapper {
 	private static final String SENHA = "senha";
 	
 	private static final String EMAIL = "email";
-
+	
+	@Override
 	protected void configure(MapperFactory factory) {
 		factory.classMap(Usuario.class, UsuarioDTO.class)
 			.field(EMAIL, EMAIL)
