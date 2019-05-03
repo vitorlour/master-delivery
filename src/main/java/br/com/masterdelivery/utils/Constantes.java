@@ -20,6 +20,9 @@ public final class Constantes {
 	public static final String ACCESS_CONTROL_EXPOSE_HEADERS = "access-control-expose-headers";
 	
 	public static final String APPLICATION_JSON = "application/json";
+	
+	public static final String ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO = "Acesso negado, precisa se logar primeiro !";
+
 
 	
 }

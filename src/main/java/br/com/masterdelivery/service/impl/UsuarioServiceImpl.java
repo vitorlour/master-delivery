@@ -21,6 +21,7 @@ import br.com.masterdelivery.service.UsuarioService;
 import br.com.masterdelivery.service.exception.AuthorizationException;
 import br.com.masterdelivery.service.exception.ObjectFoundException;
 import br.com.masterdelivery.service.exception.ObjectNotFoundException;
+import br.com.masterdelivery.utils.Constantes;
 import br.com.masterdelivery.utils.Gerador;
 
 /**
@@ -30,7 +31,6 @@ import br.com.masterdelivery.utils.Gerador;
 @Service("usuarioService")
 public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implements UsuarioService {
 
-	private static final String ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO = "Acesso negado, precisa se logar primeiro !";
 	private static final String E_MAIL_NAO_ENCONTRADO = "E-mail não encontrado !";
 	private static final String TEXTO_RECUPERAR_SENHA = "Olá, sua nova senha é ";
 	private static final String DELIMITER = "";
@@ -72,7 +72,7 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 		Usuario usuario = (Usuario) pesquisarPorId(user.getId());
 		
 		if (usuario == null) {
-			throw new AuthorizationException(ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO);
+			throw new AuthorizationException(Constantes.ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO);
 		}
 		usuario.setSenha(novaSenha.getSenha());
 		passwordEncoder(usuario);

@@ -33,12 +33,10 @@ public class EntregaDTO implements Serializable{
 	
 	private Double valorGorjeta;
 	
-	private Date duracaoCorrida;
+	private String duracaoCorrida;
 	
 	private Date dataEntrega;
-    
+	
     private PlataformaDTO plataforma;
-    
-    private UsuarioDTO usuario;
     
 }

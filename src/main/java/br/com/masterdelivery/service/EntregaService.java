@@ -3,6 +3,8 @@
  */
 package br.com.masterdelivery.service;
 
+import org.springframework.data.domain.Page;
+
 import br.com.masterdelivery.entity.Entrega;
 
 /**
@@ -10,5 +12,7 @@ import br.com.masterdelivery.entity.Entrega;
  *
  */
 public interface EntregaService extends GenericService<Entrega, Long> {
+	
+	Page<Entrega> entregaPorPage(Integer page, Integer linesPerPage, String orderBy, String direction);
 
 }

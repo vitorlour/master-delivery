@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,11 +23,14 @@ import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author vitorlour
@@ -39,6 +43,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Entrega extends BaseObject implements Serializable{
 
 	/**
@@ -50,6 +55,7 @@ public class Entrega extends BaseObject implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="native")
     @GenericGenerator(name="native", strategy="native")
 	@Column(name="id")  
+	@JsonIgnore
 	private Long id;
 
     @Column(name = "vl_entrega")
@@ -59,7 +65,7 @@ public class Entrega extends BaseObject implements Serializable{
 	private Double valorGorjeta;
 	
     @Column(name = "hr_duracao_corrida")
-	private Date duracaoCorrida;
+	private String duracaoCorrida;
 	
     @Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -69,10 +75,13 @@ public class Entrega extends BaseObject implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     private Plataforma plataforma;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="usuario_id")
+    @JsonIgnore
     private Usuario usuario;
     
     @Version
+    @JsonIgnore
     private Long version;
     
 }

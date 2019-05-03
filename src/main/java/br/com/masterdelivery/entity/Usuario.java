@@ -6,6 +6,7 @@ package br.com.masterdelivery.entity;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -64,7 +65,7 @@ public class Usuario extends BaseObject implements Serializable{
     @OneToMany(fetch = FetchType.EAGER)
 	private Set<PlataformaToken> token;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="usuario", orphanRemoval = true)
     private Set<Entrega> entrega;
     
     @Version
