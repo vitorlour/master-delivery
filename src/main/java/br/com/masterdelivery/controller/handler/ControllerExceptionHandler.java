@@ -57,8 +57,8 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(ObjectFoundException.class)
 	public ResponseEntity<StandardError> objectFound(ObjectFoundException e, HttpServletRequest request) {
 		
-		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), OBJETO_DUPLICADO, e.getMessage(), request.getRequestURI());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.FOUND.value(), OBJETO_DUPLICADO, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.FOUND).body(err);
 	}
 	
 	@ExceptionHandler(AuthorizationException.class)
