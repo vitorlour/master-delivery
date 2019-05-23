@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.masterdelivery.dto.EmailDTO;
 import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
+import br.com.masterdelivery.dto.UsuarioFakeAppsDTO;
 import br.com.masterdelivery.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,4 +66,13 @@ public class UsuarioRestController {
 		service.recuperarSenha(email);
 		return ResponseEntity.ok().build();
 	}
+	
+	@ApiOperation(value = "Vincular conta dos aplicativos ao usuário master delivery", response = ResponseEntity.class)
+	@PostMapping(value = "vincularapps", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Void> vincularContaApps(@Valid @RequestBody UsuarioFakeAppsDTO usuario) {
+		service.vincularContasApps(usuario);
+		return ResponseEntity.ok().build();
+	}
+	
+	
 }

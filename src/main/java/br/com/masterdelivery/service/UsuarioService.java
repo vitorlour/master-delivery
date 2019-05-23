@@ -3,9 +3,11 @@
  */
 package br.com.masterdelivery.service;
 
+
 import br.com.masterdelivery.dto.EmailDTO;
 import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
+import br.com.masterdelivery.dto.UsuarioFakeAppsDTO;
 import br.com.masterdelivery.entity.Usuario;
 
 /**
@@ -21,5 +23,9 @@ public interface UsuarioService extends GenericService<Usuario, Long> {
 	void recuperarSenha(EmailDTO email);
 	
 	Usuario encontrarPorEmail(String email);
+
+	void vincularContasApps(UsuarioFakeAppsDTO usuario);
+	
+	Usuario buscarUsuarioLogado();
 	
 }

@@ -4,12 +4,12 @@
 package br.com.masterdelivery.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,13 +62,18 @@ public class Usuario extends BaseObject implements Serializable{
     @JsonIgnore
     private String senha;
     
-    @OneToMany(fetch = FetchType.EAGER)
-	private Set<PlataformaToken> token;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="usua", orphanRemoval = true)
+	private Set<PlataformaToken> token = new HashSet<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy="usuario", orphanRemoval = true)
     private Set<Entrega> entrega;
     
     @Version
     private Long version;
+    
+    
+    public void addPlataforma(PlataformaToken token){
+        this.token.add(token);
+    }
     
 }

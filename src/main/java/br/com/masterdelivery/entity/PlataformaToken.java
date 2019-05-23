@@ -11,11 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,8 +59,10 @@ public class PlataformaToken extends BaseObject implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Plataforma plataforma;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Usuario usuario;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "usuario_id")
+	@JsonIgnore
+	private Usuario usua;
 
 	@Version
 	private Long version;

@@ -3,17 +3,25 @@
  */
 package br.com.masterdelivery.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import br.com.masterdelivery.dto.EmailBuilderDTO;
 import br.com.masterdelivery.dto.EmailDTO;
 import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
+import br.com.masterdelivery.dto.UsuarioFakeAppsDTO;
+import br.com.masterdelivery.entity.Plataforma;
+import br.com.masterdelivery.entity.PlataformaToken;
 import br.com.masterdelivery.entity.Usuario;
+import br.com.masterdelivery.http.HttpRequest;
 import br.com.masterdelivery.mapper.UsuarioMapper;
+import br.com.masterdelivery.repository.PlataformaRepository;
 import br.com.masterdelivery.repository.UsuarioRepository;
 import br.com.masterdelivery.security.User;
 import br.com.masterdelivery.security.service.UserService;
@@ -31,6 +39,8 @@ import br.com.masterdelivery.utils.Gerador;
 @Service("usuarioService")
 public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implements UsuarioService {
 
+	private static final String INCORRETO = "incorreto";
+	private static final String E_MAIL_E_SENHA_INVALIDOS = "E-mail e senha inválidos";
 	private static final String E_MAIL_NAO_ENCONTRADO = "E-mail não encontrado !";
 	private static final String TEXTO_RECUPERAR_SENHA = "Olá, sua nova senha é ";
 	private static final String DELIMITER = "";
@@ -51,6 +61,12 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 	
 	@Autowired
 	private Gerador gerador;
+	
+	@Autowired
+	private HttpRequest request;
+	
+	@Autowired
+	private PlataformaRepository plataformaRepository;
 	
 	@Transactional
 	public void realizarCadastro(UsuarioDTO dto) {
@@ -99,6 +115,43 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 					.conteudo(String.join(DELIMITER, TEXTO_RECUPERAR_SENHA, senha))
 					.build());
 	}
+	
+	@Transactional
+	public void vincularContasApps(UsuarioFakeAppsDTO dto) {
+		Optional<Plataforma> plataforma = null;
+
+		User user = UserService.authenticated();
+
+		Usuario usuario = (Usuario) pesquisarPorId(user.getId());
+
+		if (usuario == null) {
+			throw new AuthorizationException(Constantes.ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO);
+		}
+
+		String token = request.getTokenUsuarioFromFakeApps(dto);
+
+		if (token.isEmpty() || token.equals(INCORRETO)) {
+			throw new ObjectNotFoundException(E_MAIL_E_SENHA_INVALIDOS);
+		}
+
+		plataforma = plataformaRepository.findById(dto.getPlataforma());
+
+		if (plataforma.isPresent()) {
+			PlataformaToken plataformaToken = PlataformaToken.builder()
+															 .numeroPlataformaToken(token)
+															 .plataforma(plataforma.get())
+															 .usua(usuario)
+															 .build();
+			if (plataformaToken != null) {
+				usuario.addPlataforma(plataformaToken);
+				repository.save(usuario);
+
+			}
+
+		}
+
+	}
+	
 
 	@Transactional(readOnly = true)
 	public boolean existeEmailCadastrado(String email) {
@@ -119,4 +172,19 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 		dto.setSenha(pswEncoder.encode(dto.getSenha()));
 		return dto;
 	}
+
+	@Override
+	public Usuario buscarUsuarioLogado() {
+		User user = UserService.authenticated();
+
+		Usuario usuario = (Usuario) pesquisarPorId(user.getId());
+
+		if (usuario == null) {
+			throw new AuthorizationException(Constantes.ACESSO_NEGADO_PRECISA_SE_LOGAR_PRIMEIRO);
+		}
+		
+		return usuario;
+	}
+
+	
 }

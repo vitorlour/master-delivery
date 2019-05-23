@@ -10,6 +10,13 @@ INSERT INTO master.tb_entrega (vl_entrega, vl_gorjeta, hr_duracao_corrida, dt_en
 
 
 
+INSERT INTO master.tb_plataforma (id, cnpj_plataforma, nm_plataforma) VALUES ('1', '08.902.11X/0001-XX', 'IFOOD');
+INSERT INTO master.tb_plataforma (id, cnpj_plataforma, nm_plataforma) VALUES ('2', '26.900.16X/0001-XX', 'RAPPI');
+INSERT INTO master.tb_plataforma (id, cnpj_plataforma, nm_plataforma) VALUES ('3', '17.895.64X/0001-XX', 'Uber Eats');
+
+
+
+
 
 
 

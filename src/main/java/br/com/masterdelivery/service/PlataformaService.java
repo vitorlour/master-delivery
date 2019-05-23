@@ -10,5 +10,5 @@ import br.com.masterdelivery.entity.Plataforma;
  *
  */
 public interface PlataformaService extends GenericService<Plataforma, Long> {
-
+	
 }
