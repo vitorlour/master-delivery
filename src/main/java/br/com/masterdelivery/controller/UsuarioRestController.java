@@ -3,12 +3,15 @@
  */
 package br.com.masterdelivery.controller;
 
+import java.util.Set;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.masterdelivery.dto.EmailDTO;
+import br.com.masterdelivery.dto.SairContaFakeAppsDTO;
 import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.dto.UsuarioFakeAppsDTO;
@@ -67,10 +71,24 @@ public class UsuarioRestController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@ApiOperation(value = "Vincular conta dos aplicativos ao usuário master delivery", response = ResponseEntity.class)
+	@ApiOperation(value = "Vincula a conta dos aplicativos ao usuário do master delivery", response = ResponseEntity.class)
 	@PostMapping(value = "vincularapps", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Void> vincularContaApps(@Valid @RequestBody UsuarioFakeAppsDTO usuario) {
 		service.vincularContasApps(usuario);
+		return ResponseEntity.ok().build();
+	}
+	
+	@ApiOperation(value = "Busca contas cadastradas de app ao usuário do Master Delivery ", response = ResponseEntity.class)
+	@GetMapping(value = "contasapps", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Set<UsuarioFakeAppsDTO>> getContasApps() {
+		Set<UsuarioFakeAppsDTO> dto = service.getContasCadastradasApp();
+		return ResponseEntity.ok().body(dto);
+	}
+	
+	@ApiOperation(value = "Remove a conta do app no usuário do Master Delivery", response = ResponseEntity.class)
+	@PostMapping(value = "saircontaapp", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Set<UsuarioFakeAppsDTO>> sairContaApp(@Valid @RequestBody SairContaFakeAppsDTO dto) {
+		service.sairContaApp(dto);
 		return ResponseEntity.ok().build();
 	}
 	

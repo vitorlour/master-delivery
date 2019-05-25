@@ -72,8 +72,12 @@ public class Usuario extends BaseObject implements Serializable{
     private Long version;
     
     
-    public void addPlataforma(PlataformaToken token){
+    public void addPlataformaToken(PlataformaToken token){
         this.token.add(token);
+    }
+    
+    public void removePlataformaToken(PlataformaToken token) {
+    	this.token.remove(token);
     }
     
 }

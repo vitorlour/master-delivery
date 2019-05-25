@@ -27,7 +27,7 @@ public final class Constantes {
 	
 	public static final String END_POINT_FAKE_APP_ENTREGADOR_TOKEN = "http://localhost:8081/entregador";
 	
-	public static final String GOOGLE_MAPS_KEY_API = "AIzaSyBV6wlNuYvIPd5QoX-MY4xqF10U5gI7qJg";
+	public static final String GOOGLE_MAPS_KEY_API = "";
 	
 	public static final String VAZIO = "";
 

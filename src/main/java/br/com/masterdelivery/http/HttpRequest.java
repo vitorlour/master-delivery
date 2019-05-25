@@ -3,12 +3,8 @@
  */
 package br.com.masterdelivery.http;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -16,8 +12,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -28,7 +22,6 @@ import java.net.URISyntaxException;
 
 import br.com.masterdelivery.dto.UsuarioFakeAppsDTO;
 import br.com.masterdelivery.entity.Corrida;
-import br.com.masterdelivery.repository.CorridaRepository;
 import br.com.masterdelivery.utils.Constantes;
 
 /**

@@ -5,6 +5,7 @@ package br.com.masterdelivery.service.impl;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,13 +20,15 @@ import com.google.maps.model.LatLng;
 
 import br.com.masterdelivery.dto.CoordenadasDTO;
 import br.com.masterdelivery.entity.Corrida;
+import br.com.masterdelivery.entity.Plataforma;
 import br.com.masterdelivery.entity.PlataformaToken;
 import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.enu.StatusCorridaEnum;
 import br.com.masterdelivery.http.HttpRequest;
 import br.com.masterdelivery.repository.CorridaRepository;
+import br.com.masterdelivery.repository.PlataformaRepository;
+import br.com.masterdelivery.repository.PlataformaTokenRepository;
 import br.com.masterdelivery.service.CorridaService;
-import br.com.masterdelivery.service.PlataformaTokenService;
 import br.com.masterdelivery.service.UsuarioService;
 import br.com.masterdelivery.utils.GoogleMapsServices;
 
@@ -37,8 +40,6 @@ import br.com.masterdelivery.utils.GoogleMapsServices;
 public class CorridaServiceImpl implements CorridaService {
 
 	private static final long QUINZE_MINUTOS = 900;
-
-	private static final String UM_MINUTO = "0 0/1 * * * *";
 
 	@Autowired
 	private CorridaRepository repository;
@@ -52,13 +53,9 @@ public class CorridaServiceImpl implements CorridaService {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@Autowired
-	private PlataformaTokenService tokenService;
-
 	// TODO:precisa fazer corrida por cidade/zona para melhorar a eficiência
 	public Set<Corrida> getCorridaPorLocalizacao(CoordenadasDTO dto) {
 		Set<Corrida> lstCorrida = null;
-		Set<PlataformaToken> token = null;
 
 		LatLng origin = new LatLng(dto.getLatitude(), dto.getLongitude());
 
@@ -73,41 +70,43 @@ public class CorridaServiceImpl implements CorridaService {
 				} catch (ApiException | InterruptedException | IOException e) {
 				}
 			}
-			verificandoVinculoDeConta(lstCorrida);
+			lstCorrida = existeVinculoDeConta(lstCorrida);
 		}
 
 		return lstCorrida;
 	}
 
-	private void verificandoVinculoDeConta(Set<Corrida> lstCorrida) {
-		Set<PlataformaToken> token = null;
+	// TODO: melhorar essa lógica abaixo
+	private Set<Corrida> existeVinculoDeConta(Set<Corrida> lstCorrida) {
+		Set<Corrida> existeLstCorrida = new HashSet<>();
 
 		if (!lstCorrida.isEmpty()) {
-			Usuario usuario = usuarioService.buscarUsuarioLogado();
+			Usuario usuario = usuarioService.buscaUsuarioLogado();
 
 			if (usuario != null) {
-				token = tokenService.buscarPorUsuario(usuario);
-
-				if (!token.isEmpty()) {
-					for (PlataformaToken plataformaToken : token) {
-						for (Corrida corrida : lstCorrida) {
-							if(!verificaCorridaComPlataformaCadastrada(plataformaToken, corrida)) {
-								lstCorrida.remove(corrida);
+				if (!usuario.getToken().isEmpty()) {
+					for (Corrida corrida : lstCorrida) {
+						for (PlataformaToken token : usuario.getToken()) {
+							if (verificaCorridaComPlataformaCadastrada(token.getPlataforma(), corrida)) {
+								existeLstCorrida.add(corrida);
 							}
 						}
 					}
-				}else {
+				} else {
 					lstCorrida.clear();
 				}
+			} else {
+				lstCorrida.clear();
 			}
 		}
+		
+		return existeLstCorrida;
 	}
 
-	private boolean verificaCorridaComPlataformaCadastrada(PlataformaToken plataformaToken, Corrida corrida) {
-		return corrida.getPlataforma().equals(plataformaToken.getPlataforma().getId());
+	private boolean verificaCorridaComPlataformaCadastrada(Plataforma plataforma, Corrida corrida) {
+		return corrida.getPlataforma().equals(plataforma.getId());
 	}
 
-	// @Scheduled(cron = UM_MINUTO)
 	@Scheduled(fixedDelay = 10000)
 	@Transactional
 	public void getCorridaFromFakeAppsAndSave() {

@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,16 +54,24 @@ public class PlataformaToken extends BaseObject implements Serializable {
 
 	@Column(name = "ie_chamada_ativa")
 	private Boolean chamadaAtiva;
+	
+	@Column(name = "email_app")
+	private String emailApp;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
+	@JoinColumn(name = "plataforma_id")
 	private Plataforma plataforma;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	@JsonIgnore
 	private Usuario usua;
 
 	@Version
 	private Long version;
+	
+	public void addPlataforma(Plataforma plataforma){
+        this.plataforma = plataforma;
+    }
 
 }

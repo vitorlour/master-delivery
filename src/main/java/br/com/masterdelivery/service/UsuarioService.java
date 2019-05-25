@@ -4,7 +4,10 @@
 package br.com.masterdelivery.service;
 
 
+import java.util.Set;
+
 import br.com.masterdelivery.dto.EmailDTO;
+import br.com.masterdelivery.dto.SairContaFakeAppsDTO;
 import br.com.masterdelivery.dto.SenhaDTO;
 import br.com.masterdelivery.dto.UsuarioDTO;
 import br.com.masterdelivery.dto.UsuarioFakeAppsDTO;
@@ -26,6 +29,10 @@ public interface UsuarioService extends GenericService<Usuario, Long> {
 
 	void vincularContasApps(UsuarioFakeAppsDTO usuario);
 	
-	Usuario buscarUsuarioLogado();
+	Usuario buscaUsuarioLogado();
+
+	Set<UsuarioFakeAppsDTO> getContasCadastradasApp();
+
+	void sairContaApp(SairContaFakeAppsDTO dto);
 	
 }

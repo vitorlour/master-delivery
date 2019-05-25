@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,8 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 403, message = "Não tem direito de acesso ao conteúdo"),
 		@ApiResponse(code = 404, message = "O servidor não pode encontrar o recurso solicitado.") })
 @RestController
-@RequestMapping(value = "/corrida/")
+@RequestMapping(value = "/corrida")
+@Validated
 public class CorridaRestController {
 	
 	@Autowired
