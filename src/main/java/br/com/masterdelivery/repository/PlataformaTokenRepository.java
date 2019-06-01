@@ -17,5 +17,5 @@ import br.com.masterdelivery.entity.Usuario;
 @Repository("plataformaTokenRepository")
 public interface PlataformaTokenRepository extends GenericRepository<PlataformaToken, Long> {
 	
-	Set<PlataformaToken> findByUsua(Usuario usua);
+	Set<PlataformaToken> findByUsuario(Usuario usuario);
 }

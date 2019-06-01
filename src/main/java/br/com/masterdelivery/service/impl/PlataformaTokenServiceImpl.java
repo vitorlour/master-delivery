@@ -28,7 +28,7 @@ public class PlataformaTokenServiceImpl extends GenericServiceImpl<PlataformaTok
 	
 	@Transactional(readOnly = true)
 	public Set<PlataformaToken> buscarPorUsuario(Usuario usuario) {
-		return repository.findByUsua(usuario);
+		return repository.findByUsuario(usuario);
 	}
 
 }

@@ -58,10 +58,10 @@ public class Entrega extends BaseObject implements Serializable{
 	@JsonIgnore
 	private Long id;
 
-    @Column(name = "vl_entrega")
+    @Column(name = "vlr_entrega")
 	private Double valorEntrega;
 	
-    @Column(name = "vl_gorjeta")
+    @Column(name = "vlr_gorjeta")
 	private Double valorGorjeta;
 	
     @Column(name = "hr_duracao_corrida")

@@ -19,6 +19,7 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 
 import br.com.masterdelivery.dto.CoordenadasDTO;
+import br.com.masterdelivery.dto.CorridaAceitaDTO;
 import br.com.masterdelivery.entity.Corrida;
 import br.com.masterdelivery.entity.Plataforma;
 import br.com.masterdelivery.entity.PlataformaToken;
@@ -26,10 +27,10 @@ import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.enu.StatusCorridaEnum;
 import br.com.masterdelivery.http.HttpRequest;
 import br.com.masterdelivery.repository.CorridaRepository;
-import br.com.masterdelivery.repository.PlataformaRepository;
-import br.com.masterdelivery.repository.PlataformaTokenRepository;
 import br.com.masterdelivery.service.CorridaService;
 import br.com.masterdelivery.service.UsuarioService;
+import br.com.masterdelivery.service.exception.ObjectFoundException;
+import br.com.masterdelivery.service.exception.ObjectNotFoundException;
 import br.com.masterdelivery.utils.GoogleMapsServices;
 
 /**
@@ -39,7 +40,13 @@ import br.com.masterdelivery.utils.GoogleMapsServices;
 @Service("corridaService")
 public class CorridaServiceImpl implements CorridaService {
 
+	private static final String OUTRO_USUARIO_JA_ACEITOU_ESSA_CORRIDA = "Outro usuário já aceitou essa corrida";
+
+	private static final String CORRIDA_NAO_EXISTE = "Corrida não existe";
+
 	private static final long QUINZE_MINUTOS = 900;
+	
+	private static final long ZERO = 0;
 
 	@Autowired
 	private CorridaRepository repository;
@@ -54,12 +61,13 @@ public class CorridaServiceImpl implements CorridaService {
 	private UsuarioService usuarioService;
 
 	// TODO:precisa fazer corrida por cidade/zona para melhorar a eficiência
+	@Transactional
 	public Set<Corrida> getCorridaPorLocalizacao(CoordenadasDTO dto) {
 		Set<Corrida> lstCorrida = null;
 
 		LatLng origin = new LatLng(dto.getLatitude(), dto.getLongitude());
 
-		lstCorrida = repository.findByStatusCorrida(StatusCorridaEnum.PRONTO_PARA_COLETA.status());
+		lstCorrida = buscarCorridaPorStatusCorrida(StatusCorridaEnum.PRONTO_PARA_COLETA.status());
 
 		if (!lstCorrida.isEmpty()) {
 			for (Corrida corrida : lstCorrida) {
@@ -68,16 +76,17 @@ public class CorridaServiceImpl implements CorridaService {
 						lstCorrida.remove(corrida);
 					}
 				} catch (ApiException | InterruptedException | IOException e) {
+					e.getMessage();
 				}
 			}
-			lstCorrida = existeVinculoDeConta(lstCorrida);
+			lstCorrida = existeVinculoConta(lstCorrida);
 		}
 
 		return lstCorrida;
 	}
 
 	// TODO: melhorar essa lógica abaixo
-	private Set<Corrida> existeVinculoDeConta(Set<Corrida> lstCorrida) {
+	private Set<Corrida> existeVinculoConta(Set<Corrida> lstCorrida) {
 		Set<Corrida> existeLstCorrida = new HashSet<>();
 
 		if (!lstCorrida.isEmpty()) {
@@ -87,7 +96,7 @@ public class CorridaServiceImpl implements CorridaService {
 				if (!usuario.getToken().isEmpty()) {
 					for (Corrida corrida : lstCorrida) {
 						for (PlataformaToken token : usuario.getToken()) {
-							if (verificaCorridaComPlataformaCadastrada(token.getPlataforma(), corrida)) {
+							if (verificaCorridaComPlataformaCadastrada(token.getPlataforma(), corrida) && corrida.getUsuario() == null) {
 								existeLstCorrida.add(corrida);
 							}
 						}
@@ -131,7 +140,48 @@ public class CorridaServiceImpl implements CorridaService {
 	}
 
 	private boolean getDuration(LatLng origin, Corrida corrida) throws ApiException, InterruptedException, IOException {
-		return maps.getDuration(origin, corrida.getEndCliente()) > QUINZE_MINUTOS;
+		long duracaoCorrida = maps.getDuration(origin, corrida.getEndCliente());
+		
+		if(duracaoCorrida == ZERO) {
+			return false;
+		}
+		
+		return duracaoCorrida > QUINZE_MINUTOS;
+	}
+	
+	@Transactional
+	public void corridaAceita(CorridaAceitaDTO dto) {
+		Usuario usuario = usuarioService.buscaUsuarioLogado();
+		
+		Corrida corrida = buscarCorridaPorTokenCorrida(dto.getTokenCorrida());
+		
+		if(corrida == null) {
+			throw new ObjectNotFoundException(CORRIDA_NAO_EXISTE);
+		}
+		
+		if(corrida.getUsuario() != null) {
+			if(!usuarioCorridaIgualUsuarioLogado(usuario, corrida)) {
+				throw new ObjectFoundException(OUTRO_USUARIO_JA_ACEITOU_ESSA_CORRIDA);
+			}
+		}else {
+			corrida.setUsuario(usuario);
+			
+			repository.saveAndFlush(corrida);
+		}
+	}
+
+	private boolean usuarioCorridaIgualUsuarioLogado(Usuario usuario, Corrida corrida) {
+		return corrida.getUsuario().getId().equals(usuario.getId());
+	}
+	
+	@Transactional(readOnly = true)
+	public Set<Corrida> buscarCorridaPorStatusCorrida(Long status){
+		return repository.findByStatusCorrida(status);
+	}
+	
+	@Transactional(readOnly = true)
+	public Corrida buscarCorridaPorTokenCorrida(String tokenCorrida){
+		return repository.findByTokenCorrida(tokenCorrida);
 	}
 
 }

@@ -2,12 +2,17 @@ package br.com.masterdelivery.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +51,7 @@ public class Corrida {
 	@Column(name = "cep_cliente")
 	private String cepCliente;
 	
-	@Column(name = "vl_entrega")
+	@Column(name = "vlr_entrega")
 	private Double valorEntrega;
 	
 	@Column(name = "status_corrida")
@@ -57,5 +62,10 @@ public class Corrida {
 	
 	@Column(name = "nr_token_corrida")
 	private String tokenCorrida;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="usuario_id")
+    @JsonIgnore
+    private Usuario usuario;
 	
 }

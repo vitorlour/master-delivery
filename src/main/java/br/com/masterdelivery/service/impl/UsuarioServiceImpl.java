@@ -24,7 +24,6 @@ import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.http.HttpRequest;
 import br.com.masterdelivery.mapper.UsuarioMapper;
 import br.com.masterdelivery.repository.PlataformaRepository;
-import br.com.masterdelivery.repository.PlataformaTokenRepository;
 import br.com.masterdelivery.repository.UsuarioRepository;
 import br.com.masterdelivery.security.User;
 import br.com.masterdelivery.security.service.UserService;
@@ -71,9 +70,6 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 
 	@Autowired
 	private PlataformaRepository plataformaRepository;
-	
-	@Autowired
-	private PlataformaTokenRepository plataformaTokenRepository;
 	
 	@Transactional
 	public void realizarCadastro(UsuarioDTO dto) {
@@ -144,13 +140,12 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 			PlataformaToken plataformaToken = PlataformaToken.builder()
 															.numeroPlataformaToken(token)
 															.emailApp(dto.getEmail())
-															.usua(usuario)
+															.usuario(usuario)
 															.build();
 			if (plataformaToken != null) {
 				plataformaToken.addPlataforma(plataforma.get());
 				usuario.addPlataformaToken(plataformaToken);
-				salvar(usuario);;
-
+				salvar(usuario);
 			}
 
 		}
@@ -162,14 +157,16 @@ public class UsuarioServiceImpl extends GenericServiceImpl<Usuario, Long> implem
 		
 		if(!usuario.getToken().isEmpty()) {
 			for (PlataformaToken token : usuario.getToken()) {
-				if(token.getEmailApp().equals(dto.getEmail())) {
-					if(token.getPlataforma().getId().equals(dto.getPlataforma())) {
-						existe = true;
-					}
+				if(token.getEmailApp().equals(dto.getEmail()) && verificarIdPlataforma(dto, token)) {
+					existe = true;
 				}
 			}
 		}
 		return existe;
+	}
+
+	private boolean verificarIdPlataforma(UsuarioFakeAppsDTO dto, PlataformaToken token) {
+		return token.getPlataforma().getId().equals(dto.getPlataforma());
 	}
 
 	@Transactional(readOnly = true)

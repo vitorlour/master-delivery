@@ -22,4 +22,7 @@ public interface CorridaRepository extends JpaRepository<Corrida, Long> {
 	
 	Set<Corrida> findByStatusCorrida(Long statusCorrida);
 	
+	Corrida findByTokenCorrida(String tokenCorrida);
+
+	
 }

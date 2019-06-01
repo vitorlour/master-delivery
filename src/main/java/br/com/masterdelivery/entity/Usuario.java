@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.Email;
@@ -62,11 +63,14 @@ public class Usuario extends BaseObject implements Serializable{
     @JsonIgnore
     private String senha;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="usua", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="usuario", orphanRemoval = true)
 	private Set<PlataformaToken> token = new HashSet<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy="usuario", orphanRemoval = true)
     private Set<Entrega> entrega;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy="usuario", orphanRemoval = true)
+    private Corrida corrida;
     
     @Version
     private Long version;

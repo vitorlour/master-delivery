@@ -65,7 +65,7 @@ public class PlataformaToken extends BaseObject implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	@JsonIgnore
-	private Usuario usua;
+	private Usuario usuario;
 
 	@Version
 	private Long version;
