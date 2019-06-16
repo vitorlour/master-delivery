@@ -4,6 +4,7 @@
 package br.com.masterdelivery.service.impl;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.masterdelivery.DataGenerator;
 import br.com.masterdelivery.entity.Entrega;
 import br.com.masterdelivery.entity.Usuario;
 import br.com.masterdelivery.repository.EntregaRepository;
@@ -34,6 +36,9 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega, Long> implem
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	@Autowired
+	private DataGenerator data;
+	
 	
 	//A fazer: Voltar um DTO
 	@Transactional(readOnly=true)
@@ -48,4 +53,5 @@ public class EntregaServiceImpl extends GenericServiceImpl<Entrega, Long> implem
 		
 		return repository.findByUsuario(usuario, pageRequest);
 	}
+
 }

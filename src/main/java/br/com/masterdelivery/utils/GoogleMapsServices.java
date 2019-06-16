@@ -34,14 +34,26 @@ public class GoogleMapsServices {
 	}
 	
 	public long getDuration(LatLng origin, String destination) throws ApiException, InterruptedException, IOException {
-		DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(getGeoApiContext()); 
-	    DistanceMatrix result = req.origins(origin)
-	               					.destinations(destination)
-	               					.mode(TravelMode.DRIVING)
-	               					.language(PT_BR)
-	               					.await();
+		DistanceMatrix result = distanceMatrix(origin, destination);
 	    
 	    return result.rows[0].elements[0].duration.inSeconds;
+	}
+	
+	public long getDistance(LatLng origin, String destination) throws ApiException, InterruptedException, IOException {
+		DistanceMatrix result = distanceMatrix(origin, destination);
+	    
+	    return result.rows[0].elements[0].distance.inMeters;
+	}
+
+	private DistanceMatrix distanceMatrix(LatLng origin, String destination)
+			throws ApiException, InterruptedException, IOException {
+		DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(getGeoApiContext()); 
+	    return req.origins(origin)
+	              .destinations(destination)
+	              .mode(TravelMode.DRIVING)
+	              .language(PT_BR)
+	              .await();
+		 
 	}
 	
 	public static GeoApiContext getGeoApiContext() {
@@ -51,5 +63,8 @@ public class GoogleMapsServices {
 				  .build();
 		
 	}
+	
+	
+	
 
 }

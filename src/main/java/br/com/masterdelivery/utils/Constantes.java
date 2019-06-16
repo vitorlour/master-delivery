@@ -30,6 +30,9 @@ public final class Constantes {
 	public static final String GOOGLE_MAPS_KEY_API = "";
 	
 	public static final String VAZIO = "";
+	
+	public static final String END_POINT_CORRIDA_CONCLUIDA = "http://localhost:8081/corrida/concluida";
+
 
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import br.com.masterdelivery.dto.UsuarioDTO;
+import br.com.masterdelivery.repository.EntregaRepository;
 import br.com.masterdelivery.service.UsuarioService;
 
 @EntityScan(basePackages = { "br.com.masterdelivery.entity" })
@@ -16,7 +17,7 @@ import br.com.masterdelivery.service.UsuarioService;
 public class CrudTest implements CommandLineRunner {
 
 	@Autowired
-	private UsuarioService service;
+	private EntregaRepository repo;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CrudTest.class, args);
@@ -32,12 +33,8 @@ public class CrudTest implements CommandLineRunner {
 	}
 
 	private void saveDataDTO() {
-		UsuarioDTO dto = new UsuarioDTO();
-
-		dto.setEmail("vitorlour@hotmail.com");
-		dto.setSenha("123456");
 		
-		service.realizarCadastro(dto);
+		
 	}
 
 }

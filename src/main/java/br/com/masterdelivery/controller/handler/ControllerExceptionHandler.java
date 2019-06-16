@@ -13,6 +13,7 @@ import br.com.masterdelivery.controller.exception.StandardError;
 import br.com.masterdelivery.controller.exception.ValidationError;
 import br.com.masterdelivery.service.exception.AuthorizationException;
 import br.com.masterdelivery.service.exception.DataIntegrityException;
+import br.com.masterdelivery.service.exception.LocationException;
 import br.com.masterdelivery.service.exception.ObjectFoundException;
 import br.com.masterdelivery.service.exception.ObjectNotFoundException;
 
@@ -20,6 +21,8 @@ import br.com.masterdelivery.service.exception.ObjectNotFoundException;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 	
+	private static final String VOCE_NAO_CHEGOU_AO_LOCAL = "Você não chegou ao local !";
+
 	private static final String ACESSO_NEGADO = "Acesso negado";
 
 	private static final String OBJETO_DUPLICADO = "Objeto duplicado";
@@ -66,5 +69,12 @@ public class ControllerExceptionHandler {
 		
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), ACESSO_NEGADO, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+	}
+	
+	@ExceptionHandler(LocationException.class)
+	public ResponseEntity<StandardError> authorization(LocationException e, HttpServletRequest request) {
+		
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.I_AM_A_TEAPOT.value(), VOCE_NAO_CHEGOU_AO_LOCAL, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(err);
 	}
 }

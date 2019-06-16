@@ -22,7 +22,8 @@ public interface CorridaRepository extends JpaRepository<Corrida, Long> {
 	
 	Set<Corrida> findByStatusCorrida(Long statusCorrida);
 	
+	long countByStatusCorrida(Long statusCorrida);
+	
 	Corrida findByTokenCorrida(String tokenCorrida);
 
-	
 }

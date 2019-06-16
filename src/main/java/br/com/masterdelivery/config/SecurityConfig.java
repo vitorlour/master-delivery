@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/swagger-resources/**", 
 			"/v2/api-docs",
 			"/webjars/**",
+			"/actuator/***",
 			"/h2-console/**",
 	};
 
@@ -48,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] PUBLIC_MATCHERS_POST = {
 			"/usuario/realizarcadastro/**",
+			"/entrega/getentregasporano**",
+			"/corrida/corridasnumerodashboard/**",
 			"/usuario/recuperarsenha/**"
 	};
 	
@@ -72,7 +75,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET)
 			.permitAll()
 			.anyRequest()
-			.authenticated();
+			.permitAll();
+			//.authenticated();
 		
 		
 		//desabilita a sessão de usuário

@@ -3,15 +3,24 @@
  */
 package br.com.masterdelivery.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.masterdelivery.dto.AnoDTO;
+import br.com.masterdelivery.dto.EntregasPorAnoDTO;
 import br.com.masterdelivery.entity.Entrega;
 import br.com.masterdelivery.service.EntregaService;
 import io.swagger.annotations.Api;
@@ -34,6 +43,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "O servidor não pode encontrar o recurso solicitado.") })
 @RestController
 @RequestMapping(value = "/entrega/")
+@Validated
 public class EntregaRestController {
 	
 	@Autowired
@@ -49,4 +59,5 @@ public class EntregaRestController {
 		Page<Entrega> dto = service.entregaPorPage(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok().body(dto);
 	}
+	
 }

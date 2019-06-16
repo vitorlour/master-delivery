@@ -72,7 +72,17 @@ public class Entrega extends BaseObject implements Serializable{
     @Column(name = "dt_entrega")
 	private Date dataEntrega;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "nr_token_corrida")
+	private String tokenCorrida;
+    
+    @Column(name = "nm_estabelecimento")
+	private String nomeEstabelecimento;
+    
+    @Column(name = "pedido_id")
+   	private Long pedidoId;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "plataforma_id")
     private Plataforma plataforma;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -83,5 +93,9 @@ public class Entrega extends BaseObject implements Serializable{
     @Version
     @JsonIgnore
     private Long version;
+    
+    public void addPlataforma(Plataforma plataforma){
+        this.plataforma = plataforma;
+    }
     
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.masterdelivery.dto.CoordenadasDTO;
 import br.com.masterdelivery.dto.CorridaAceitaDTO;
+import br.com.masterdelivery.dto.NumeroCorridasDTO;
 import br.com.masterdelivery.entity.Corrida;
 import br.com.masterdelivery.service.CorridaService;
 import io.swagger.annotations.Api;
@@ -38,6 +40,7 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 400, message = "Essa resposta significa que o servidor não entendeu a requisição pois está com uma sintaxe inválida."),
 		@ApiResponse(code = 401, message = "Você deve se autenticar para obter a resposta solicitada."),
 		@ApiResponse(code = 403, message = "Não tem direito de acesso ao conteúdo"),
+		@ApiResponse(code = 418, message = "Location error"),
 		@ApiResponse(code = 404, message = "O servidor não pode encontrar o recurso solicitado.") })
 @RestController
 @RequestMapping(value = "/corrida/")
@@ -59,5 +62,33 @@ public class CorridaRestController {
 	public ResponseEntity<Void> corridaAceita(@Valid @RequestBody CorridaAceitaDTO dto) {
 		service.corridaAceita(dto);
 		return ResponseEntity.ok().build();
+	}
+	
+	@ApiOperation(value = "Usuário coleta o pedido", response = ResponseEntity.class)
+	@PostMapping(value = "pedidocoletado", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Void> pedidoColetado(@Valid @RequestBody CoordenadasDTO dto) {
+		service.pedidoColetado(dto);
+		return ResponseEntity.ok().build();
+	}
+	
+	@ApiOperation(value = "Usuário entrega o pedido", response = ResponseEntity.class)
+	@PostMapping(value = "entregapedidoefetuada", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Void> entregaPedidoEfetuada(@Valid @RequestBody CoordenadasDTO dto) {
+		service.entregaPedidoEfetuada(dto);
+		return ResponseEntity.ok().build();
+	}
+	
+	@ApiOperation(value = "Obter atualização da corrida em andamento", response = ResponseEntity.class)
+	@GetMapping(value = "corridaemandamento", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Corrida> getCorridaAndamento() {
+		Corrida corrida = service.getCorridaAndamento();
+		return ResponseEntity.ok().body(corrida);
+	}
+	
+	@ApiOperation(value = "Obtem numero de corridas com todos os status para o dashboard", response = ResponseEntity.class)
+	@GetMapping(value = "corridasnumerodashboard", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<NumeroCorridasDTO> getNumeroCorridasDashBoard() {
+		NumeroCorridasDTO dto = service.getNumeroCorridasDashBoard();
+		return ResponseEntity.ok().body(dto);
 	}
 }

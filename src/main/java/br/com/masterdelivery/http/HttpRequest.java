@@ -72,6 +72,23 @@ public class HttpRequest {
 
 		return token;
 	}
+	
+	public boolean corridaConcluida(Long id) {
+		HttpResponse response = null;
+		boolean sucesso = false;	
+		
+		try {
+			response = post(Constantes.END_POINT_CORRIDA_CONCLUIDA, id);
+
+			if (response.getStatusLine().getStatusCode() == 200) {
+				sucesso = true;
+			}
+
+		} catch (Exception e) {
+		}
+
+		return sucesso;
+	}
 
 	public HttpResponse get(String url) throws URISyntaxException, IOException {
 		HttpClient httpclient = new DefaultHttpClient();
@@ -88,7 +105,7 @@ public class HttpRequest {
 		URIBuilder builder = new URIBuilder(url);
 		URI uri = builder.build();
 		HttpPost request = new HttpPost(uri);
-
+		
 		request.setHeader(CONTENT_TYPE, APPLICATION_JSON_CHARSET_UTF_8);
 		String jsonInString = new Gson().toJson(obj);
 
